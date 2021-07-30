@@ -1,0 +1,26 @@
+{
+  "name": "astronauts-2-back-end",
+  "version": "1.0.0",
+  "description": "Node.JS REST API that enables its users to store information about astronauts. I wrote a React based single-page application for this API, you can find it in this repo: astronauts-2-front-end.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/samueldusek/astronauts-2-back-end.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/samueldusek/astronauts-2-back-end/issues"
+  },
+  "homepage": "https://github.com/samueldusek/astronauts-2-back-end#readme",
+  "dependencies": {
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "mongoose": "^5.13.4"
+  }
+}
