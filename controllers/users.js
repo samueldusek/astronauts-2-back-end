@@ -1,4 +1,5 @@
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 
 const User = require("../models/User");
 
@@ -106,17 +107,21 @@ module.exports.login = async (req, res) => {
     user.hashedPassword
   );
   if (isAuthenticated) {
-    return res.status(200).json({
-      success: {
-        status: 200,
-        message: "You are logged in.",
-      },
-      user: {
-        id: user._id,
-        username: user.username,
-        email: user.email,
-      },
-    });
+    const jwtToken = jwt.sign({ id: user._id }, process.env.JWT_TOKEN_SECRET);
+    return res
+      .status(200)
+      .header("jwtToken", jwtToken)
+      .json({
+        success: {
+          status: 200,
+          message: "You are logged in.",
+        },
+        user: {
+          id: user._id,
+          username: user.username,
+          email: user.email,
+        },
+      });
   }
 
   res.status(401).json({
