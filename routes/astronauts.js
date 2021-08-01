@@ -6,12 +6,12 @@ const isAuthenticated = require("../utils/isAuthenticated");
 router
   .route("/")
   .get(isAuthenticated, astronautsController.getAllAstronauts)
-  .post(astronautsController.addAstronaut);
+  .post(isAuthenticated, astronautsController.addAstronaut);
 
 router
   .route("/:astronautId")
-  .get(astronautsController.getAstronaut)
-  .put(astronautsController.updateAstronaut)
-  .delete(astronautsController.deleteAstronaut);
+  .get(isAuthenticated, astronautsController.getAstronaut)
+  .put(isAuthenticated, astronautsController.updateAstronaut)
+  .delete(isAuthenticated, astronautsController.deleteAstronaut);
 
 module.exports = router;

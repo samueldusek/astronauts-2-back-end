@@ -107,7 +107,9 @@ module.exports.login = async (req, res) => {
     user.hashedPassword
   );
   if (isAuthenticated) {
-    const jwtToken = jwt.sign({ id: user._id }, process.env.JWT_TOKEN_SECRET);
+    const jwtToken = jwt.sign({ id: user._id }, process.env.JWT_TOKEN_SECRET, {
+      expiresIn: 3600,
+    });
     return res
       .status(200)
       .header("jwtToken", jwtToken)

@@ -7,20 +7,20 @@ module.exports = (req, res, next) => {
     return res.status(401).json({
       error: {
         status: 401,
-        message: "Access denied. Authenticate first.",
+        message: "Access denied. Log in first.",
       },
     });
   }
 
   try {
     const userData = jwt.verify(token, process.env.JWT_TOKEN_SECRET);
-    req.body.userData = userData;
+    req.userData = userData;
     next();
   } catch (error) {
     return res.status(401).json({
       error: {
         status: 401,
-        message: "Access to this route denied. Authenticate first.",
+        message: "Access denied. Log in first.",
       },
     });
   }
