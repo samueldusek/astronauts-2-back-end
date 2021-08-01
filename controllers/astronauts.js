@@ -1,6 +1,7 @@
 const Astronaut = require("../models/Astronaut");
 
 module.exports.getAllAstronauts = async (req, res) => {
+  const { userData } = req.body;
   const astronauts = await Astronaut.find();
   res.status(200).json(astronauts);
 };

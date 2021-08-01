@@ -1,10 +1,11 @@
 const express = require("express");
 const router = express.Router();
 const astronautsController = require("../controllers/astronauts");
+const isAuthenticated = require("../utils/isAuthenticated");
 
 router
   .route("/")
-  .get(astronautsController.getAllAstronauts)
+  .get(isAuthenticated, astronautsController.getAllAstronauts)
   .post(astronautsController.addAstronaut);
 
 router
