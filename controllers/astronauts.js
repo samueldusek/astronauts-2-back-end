@@ -1,6 +1,8 @@
 const Astronaut = require("../models/Astronaut");
 const User = require("../models/User");
 
+const { addAstronautValidation } = require("../validations/astronauts");
+
 module.exports.getAllAstronauts = async (req, res) => {
   const { userData } = req;
   try {
@@ -47,6 +49,17 @@ module.exports.getAstronaut = async (req, res) => {
 module.exports.addAstronaut = async (req, res) => {
   const { userData } = req;
   const astronaut = req.body;
+
+  const { error } = addAstronautValidation(astronaut);
+  if (error) {
+    return res.status(400).json({
+      error: {
+        status: 400,
+        message: error.details[0].message,
+      },
+    });
+  }
+
   const newAstronaut = new Astronaut(astronaut);
   try {
     await newAstronaut.save();
@@ -62,6 +75,7 @@ module.exports.addAstronaut = async (req, res) => {
       },
     });
   } catch (error) {
+    console.log(error);
     return res.status(500).json({
       error: {
         status: 500,
@@ -75,6 +89,17 @@ module.exports.updateAstronaut = async (req, res) => {
   const { userData } = req;
   const { astronautId } = req.params;
   const astronaut = req.body;
+
+  const { error } = addAstronautValidation(astronaut);
+  if (error) {
+    return res.status(400).json({
+      error: {
+        status: 400,
+        message: error.details[0].message,
+      },
+    });
+  }
+
   try {
     const user = await User.findById(userData.id).populate("astronauts");
     const usersAstronaut = user.astronauts.find(
