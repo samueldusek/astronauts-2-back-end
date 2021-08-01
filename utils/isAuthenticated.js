@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken");
 
-module.exports = (req, res, next) => {
+module.exports.isAuthenticated = (req, res, next) => {
   const token = req.header("jwtToken");
 
   if (!token) {
@@ -24,4 +24,13 @@ module.exports = (req, res, next) => {
       },
     });
   }
+};
+
+module.exports.handleInvalidMethod = (req, res) => {
+  res.status(405).json({
+    error: {
+      status: 405,
+      message: "Invalid method.",
+    },
+  });
 };
