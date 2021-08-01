@@ -1,3 +1,5 @@
+const bcrypt = require("bcrypt");
+
 const User = require("../models/User");
 
 const userValidation = require("../validations/users");
@@ -41,17 +43,22 @@ module.exports.register = async (req, res) => {
   }
 
   // Use bcrypt to hash the password
+  const salt = await bcrypt.genSalt(10);
+  const hashedPassword = await bcrypt.hash(userData.password, salt);
 
   const newUser = new User({
     username: userData.username,
     email: userData.email,
-    hashedPassword: userData.password,
+    hashedPassword: hashedPassword,
   });
 
   try {
     await newUser.save();
-    console.log(newUser);
     return res.status(201).json({
+      success: {
+        status: 201,
+        message: "User with following information was created.",
+      },
       user: {
         id: newUser._id,
         username: newUser.username,
@@ -59,7 +66,6 @@ module.exports.register = async (req, res) => {
       },
     });
   } catch (error) {
-    console.log(error);
     return res.status(500).json({
       error: {
         status: 500,
@@ -70,5 +76,53 @@ module.exports.register = async (req, res) => {
 };
 
 module.exports.login = async (req, res) => {
-  res.send("You are logged in!");
+  const userData = req.body;
+
+  // Check if user data is valid
+  const { error } = userValidation.loginValidation(userData);
+  if (error) {
+    return res.status(400).json({
+      error: {
+        status: 400,
+        message: error.details[0].message,
+      },
+    });
+  }
+
+  // Check if user with provided username exists
+  const user = await User.findOne({ username: userData.username });
+  if (!user) {
+    return res.status(404).json({
+      error: {
+        status: 404,
+        message: "User does not exist.",
+      },
+    });
+  }
+
+  // Check if password is correct for given user
+  const isAuthenticated = await bcrypt.compare(
+    userData.password,
+    user.hashedPassword
+  );
+  if (isAuthenticated) {
+    return res.status(200).json({
+      success: {
+        status: 200,
+        message: "You are logged in.",
+      },
+      user: {
+        id: user._id,
+        username: user.username,
+        email: user.email,
+      },
+    });
+  }
+
+  res.status(401).json({
+    error: {
+      status: 401,
+      message: "The password or the username is incorrect.",
+    },
+  });
 };
