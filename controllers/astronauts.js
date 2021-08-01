@@ -1,4 +1,4 @@
-const Astronaut = require("../models/astronauts");
+const Astronaut = require("../models/Astronaut");
 
 module.exports.getAllAstronauts = async (req, res) => {
   const astronauts = await Astronaut.find();

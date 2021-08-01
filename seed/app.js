@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const astronauts = require("./astronauts");
 
-const Astronaut = require("../models/astronauts");
+const Astronaut = require("../models/Astronaut");
 
 mongoose.connect("mongodb://localhost:27017/astronauts-2-db", {
   useNewUrlParser: true,

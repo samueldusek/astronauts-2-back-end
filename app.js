@@ -17,7 +17,9 @@ mongoose.connect(dbUrl, {
 });
 
 const astronautsRoutes = require("./routes/astronauts");
+const usersRoutes = require("./routes/users");
 app.use("/api/astronauts", astronautsRoutes);
+app.use("/api/users", usersRoutes);
 
 app.get("/", (req, res) => {
   res.send("Hello world!");
