@@ -68,7 +68,7 @@ module.exports.addAstronaut = async (req, res) => {
     await user.save();
     return res.status(201).json({
       success: {
-        message: "New astronaut added.",
+        message: `New astronaut ${newAstronaut.firstName} ${newAstronaut.lastName} added.`,
       },
       astronaut: {
         ...newAstronaut._doc,
@@ -115,7 +115,7 @@ module.exports.updateAstronaut = async (req, res) => {
       );
       return res.status(200).json({
         success: {
-          message: "Astronaut has been updated.",
+          message: `Astronaut ${astronaut.firstName} ${astronaut.lastName} has been updated.`,
         },
         astronaut: {
           _id: astronautId,
@@ -126,12 +126,11 @@ module.exports.updateAstronaut = async (req, res) => {
       return res.status(404).json({
         error: {
           status: 404,
-          message: "Astronaut not found.",
+          message: "Astronaut with provided id not found.",
         },
       });
     }
   } catch (error) {
-    console.log(error);
     return res.status(500).json({
       error: {
         status: 500,

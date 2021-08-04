@@ -15,6 +15,7 @@ module.exports.register = async (req, res) => {
       error: {
         status: 400,
         message: error.details[0].message,
+        key: error.details[0].context.key,
       },
     });
   }
@@ -26,6 +27,7 @@ module.exports.register = async (req, res) => {
       error: {
         status: 400,
         message: "The email is already taken. Provide different email.",
+        key: "email",
       },
     });
   }
@@ -39,6 +41,7 @@ module.exports.register = async (req, res) => {
       error: {
         status: 400,
         message: "The username is already taken. Provide different username.",
+        key: "username",
       },
     });
   }
@@ -58,7 +61,8 @@ module.exports.register = async (req, res) => {
     return res.status(201).json({
       success: {
         status: 201,
-        message: "User with following information was created.",
+        message:
+          "You have been successfully registered. Log in using your username and password.",
       },
       user: {
         id: newUser._id,
@@ -93,10 +97,10 @@ module.exports.login = async (req, res) => {
   // Check if user with provided username exists
   const user = await User.findOne({ username: userData.username });
   if (!user) {
-    return res.status(404).json({
+    return res.status(401).json({
       error: {
-        status: 404,
-        message: "User does not exist.",
+        status: 401,
+        message: "The password or the username is incorrect.",
       },
     });
   }
@@ -116,10 +120,12 @@ module.exports.login = async (req, res) => {
       .json({
         success: {
           status: 200,
-          message: "You are logged in.",
+          message:
+            "You are logged in. You can start recording your astronauts.",
         },
         user: {
           id: user._id,
+          token: jwtToken,
           username: user.username,
           email: user.email,
         },
